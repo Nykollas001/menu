@@ -1,0 +1,89 @@
+{% extends 'expenses/base.html' %}
+
+{% block title %}Início{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center mb-5">
+        <h1 class="display-4 fw-bold">Bem-vindo ao Sistema de Gerenciamento</h1>
+        <p class="lead text-muted">Escolha uma das opções abaixo para começar</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="display-1 mb-3 text-primary">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h5 class="card-title">Diário</h5>
+                <p class="card-text">Registre suas anotações e pensamentos diários de forma segura e organizada.</p>
+                <a href="{% url 'expenses:diary_list' %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right me-2"></i>Acessar Diário
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="display-1 mb-3 text-primary">
+                    <i class="fas fa-key"></i>
+                </div>
+                <h5 class="card-title">Senhas</h5>
+                <p class="card-text">Armazene suas senhas de forma segura e acesse-as quando precisar.</p>
+                <a href="{% url 'expenses:password_list' %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right me-2"></i>Gerenciar Senhas
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="display-1 mb-3 text-primary">
+                    <i class="fas fa-list"></i>
+                </div>
+                <h5 class="card-title">Tier List</h5>
+                <p class="card-text">Crie e gerencie suas tier lists personalizadas com facilidade.</p>
+                <a href="{% url 'expenses:tierlist_list' %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right me-2"></i>Ver Tier Lists
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="display-1 mb-3 text-primary">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h5 class="card-title">Notas</h5>
+                <p class="card-text">Gerencie as notas dos alunos de forma eficiente e organizada.</p>
+                <a href="{% url 'expenses:grade_list' %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right me-2"></i>Ver Notas
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="display-1 mb-3 text-primary">
+                    <i class="fas fa-cards"></i>
+                </div>
+                <h5 class="card-title">Cartas</h5>
+                <p class="card-text">Tire uma carta e receba uma mensagem especial para reflexão.</p>
+                <a href="{% url 'expenses:draw_card' %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right me-2"></i>Tirar Carta
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

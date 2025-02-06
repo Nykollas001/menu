@@ -1,0 +1,131 @@
+{% extends 'expenses/base.html' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-user-plus me-2"></i>Criar Conta
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nome de Usuário</label>
+                            <input type="text" 
+                                   name="username" 
+                                   class="form-control form-control-lg" 
+                                   required>
+                            <div class="invalid-feedback">
+                                Por favor, escolha um nome de usuário.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" 
+                                   name="email" 
+                                   class="form-control form-control-lg" 
+                                   required>
+                            <div class="invalid-feedback">
+                                Por favor, insira um email válido.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password1" class="form-label">Senha</label>
+                            <div class="input-group">
+                                <input type="password" 
+                                       name="password1" 
+                                       class="form-control form-control-lg" 
+                                       required
+                                       id="password1">
+                                <button class="btn btn-outline-secondary" 
+                                        type="button"
+                                        onclick="togglePassword('password1')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                Por favor, escolha uma senha.
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password2" class="form-label">Confirmar Senha</label>
+                            <div class="input-group">
+                                <input type="password" 
+                                       name="password2" 
+                                       class="form-control form-control-lg" 
+                                       required
+                                       id="password2">
+                                <button class="btn btn-outline-secondary" 
+                                        type="button"
+                                        onclick="togglePassword('password2')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                Por favor, confirme sua senha.
+                            </div>
+                        </div>
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Criar Conta
+                            </button>
+                            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Já tenho uma conta
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = input.nextElementSibling.querySelector('i');
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+// Validação do formulário
+(function () {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+{% endblock %}

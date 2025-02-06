@@ -1,0 +1,116 @@
+{% extends 'expenses/base.html' %}
+
+{% block title %}{% if grade %}Editar{% else %}Nova{% endif %} Nota{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        {% if grade %}Editar{% else %}Nova{% endif %} Nota
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Disciplina</label>
+                            <input type="text" 
+                                   name="subject" 
+                                   id="subject"
+                                   class="form-control form-control-lg" 
+                                   required
+                                   value="{{ grade.subject|default:'' }}"
+                                   placeholder="Ex: Matemática, História">
+                            <div class="invalid-feedback">
+                                Por favor, informe a disciplina.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="value" class="form-label">Nota (0-10)</label>
+                            <input type="number" 
+                                   name="value" 
+                                   id="value"
+                                   class="form-control form-control-lg" 
+                                   required
+                                   min="0"
+                                   max="10"
+                                   step="0.1"
+                                   value="{{ grade.value|default:'' }}"
+                                   placeholder="Ex: 7.5">
+                            <div class="invalid-feedback">
+                                Por favor, informe uma nota entre 0 e 10.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Data</label>
+                            <input type="date" 
+                                   name="date" 
+                                   id="date"
+                                   class="form-control form-control-lg" 
+                                   required
+                                   value="{{ grade.date|date:'Y-m-d'|default:'' }}">
+                            <div class="invalid-feedback">
+                                Por favor, selecione a data.
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="notes" class="form-label">Observações (opcional)</label>
+                            <textarea name="notes" 
+                                      id="notes"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="Ex: Prova final do semestre">{{ grade.notes|default:'' }}</textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'expenses:grade_list' %}" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>Voltar
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>
+                                {% if grade %}Atualizar{% else %}Salvar{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validação do formulário
+(function () {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+
+    // Validação adicional da nota
+    const valueInput = document.getElementById('value')
+    valueInput.addEventListener('input', function() {
+        const value = parseFloat(this.value)
+        if (value < 0 || value > 10) {
+            this.setCustomValidity('A nota deve estar entre 0 e 10')
+        } else {
+            this.setCustomValidity('')
+        }
+    })
+})()
+</script>
+{% endblock %}

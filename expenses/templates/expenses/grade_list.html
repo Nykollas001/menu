@@ -1,0 +1,120 @@
+{% extends 'expenses/base.html' %}
+
+{% block title %}Notas{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold">
+                <i class="fas fa-graduation-cap text-primary me-3"></i>Minhas Notas
+            </h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'expenses:grade_create' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>Nova Nota
+            </a>
+        </div>
+    </div>
+
+    {% if grades %}
+        <div class="row">
+            {% for grade in grades %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ grade.subject }}</h5>
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-dark" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'expenses:grade_edit' grade.id %}">
+                                                <i class="fas fa-edit me-2"></i>Editar
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="{% url 'expenses:grade_delete' grade.id %}">
+                                                <i class="fas fa-trash me-2"></i>Excluir
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="grade-circle me-3 {% if grade.value >= 7 %}bg-success{% elif grade.value >= 5 %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ grade.value }}
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block">Nota Final</small>
+                                            <span class="fw-bold">{{ grade.value }}/10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Status</small>
+                                    <span class="badge {% if grade.value >= 7 %}bg-success{% elif grade.value >= 5 %}bg-warning{% else %}bg-danger{% endif %}">
+                                        {% if grade.value >= 7 %}
+                                            Aprovado
+                                        {% elif grade.value >= 5 %}
+                                            Recuperação
+                                        {% else %}
+                                            Reprovado
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="col-12">
+                                    <small class="text-muted d-block">Observações</small>
+                                    <p class="mb-0">{{ grade.notes|default:"Sem observações" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <small>
+                                <i class="fas fa-calendar me-1"></i>
+                                {{ grade.date|date:"d/m/Y" }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="display-1 text-muted mb-4">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h2 class="text-muted">Nenhuma nota registrada</h2>
+            <p class="lead text-muted">Comece registrando sua primeira nota!</p>
+            <a href="{% url 'expenses:grade_create' %}" class="btn btn-primary btn-lg mt-3">
+                <i class="fas fa-plus me-2"></i>Registrar Primeira Nota
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.grade-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+}
+</style>
+{% endblock %}

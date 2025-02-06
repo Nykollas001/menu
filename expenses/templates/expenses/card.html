@@ -1,0 +1,169 @@
+{% extends 'expenses/base.html' %}
+
+{% block title %}Cartas do Destino{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Título e Descrição -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 mb-3">
+                    <i class="fas fa-magic text-primary me-3"></i>
+                    Cartas do Destino
+                </h1>
+                <p class="lead text-muted">
+                    Tire uma carta para receber orientação sobre seus aspectos masculinos e femininos, 
+                    e a sabedoria dos ancestrais.
+                </p>
+            </div>
+
+            <!-- Área da Carta -->
+            <div class="card bg-dark border-primary mb-4">
+                <div class="card-body text-center py-5">
+                    {% if card_message %}
+                    <!-- Carta Revelada -->
+                    <div class="card-reveal">
+                        <div class="display-1 mb-4">
+                            <i class="fas fa-{{ card_icon }} text-primary"></i>
+                        </div>
+                        <h2 class="h3 card-title mb-4 text-primary">{{ card_title }}</h2>
+                        <p class="lead">{{ card_message }}</p>
+                    </div>
+                    {% else %}
+                    <!-- Estado Inicial -->
+                    <div class="card-initial">
+                        <div class="display-1 mb-4">
+                            <i class="fas fa-hand-sparkles text-primary"></i>
+                        </div>
+                        <h2 class="h3 mb-4">Tire uma carta para receber sua mensagem</h2>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center border-top border-primary py-3">
+                    <form method="get">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic me-2"></i>
+                            {% if card_message %}Tirar Nova Carta{% else %}Tirar Carta{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Significado das Cartas -->
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="card h-100 bg-dark border-info">
+                        <div class="card-header border-info py-3">
+                            <h5 class="card-title text-info mb-0">
+                                <i class="fas fa-mars me-2"></i>Aspecto Masculino
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Representa sua energia Yang, associada à ação, lógica e expressão externa.
+                                As cartas 1 e 3 revelam lições e desafios deste aspecto.
+                            </p>
+                            <div class="d-flex justify-content-between text-muted small">
+                                <span><i class="fas fa-sun me-1"></i>Carta 1: Lição</span>
+                                <span><i class="fas fa-mountain me-1"></i>Carta 3: Desafio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 bg-dark border-danger">
+                        <div class="card-header border-danger py-3">
+                            <h5 class="card-title text-danger mb-0">
+                                <i class="fas fa-venus me-2"></i>Aspecto Feminino
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Representa sua energia Yin, associada à intuição, emoção e expressão interna.
+                                As cartas 2 e 4 revelam lições e desafios deste aspecto.
+                            </p>
+                            <div class="d-flex justify-content-between text-muted small">
+                                <span><i class="fas fa-moon me-1"></i>Carta 2: Lição</span>
+                                <span><i class="fas fa-water me-1"></i>Carta 4: Desafio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assistência Ancestral -->
+            <div class="card bg-dark border-success mt-4">
+                <div class="card-header border-success py-3">
+                    <h5 class="card-title text-success mb-0">
+                        <i class="fas fa-tree me-2"></i>Assistência dos Ancestrais
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        A carta 5 traz mensagens de sabedoria e apoio dos seus ancestrais,
+                        oferecendo orientação para seu caminho atual.
+                    </p>
+                    <div class="text-muted small">
+                        <i class="fas fa-seedling me-1"></i>Carta 5: Sabedoria Ancestral
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card-reveal {
+    animation: fadeIn 1s ease-in;
+}
+
+.card-initial {
+    animation: pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+}
+
+.display-1 {
+    font-size: 4rem;
+}
+
+.card {
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+</style>
+{% endblock %}

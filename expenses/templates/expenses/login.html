@@ -1,0 +1,76 @@
+{% extends 'expenses/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header">
+                    <h3 class="text-center font-weight-light my-2">
+                        <i class="fas fa-user-circle me-2"></i>Login
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Usuário ou senha incorretos
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label" for="username">
+                                <i class="fas fa-user me-2"></i>Usuário
+                            </label>
+                            <input class="form-control" 
+                                   id="username" 
+                                   name="username" 
+                                   type="text" 
+                                   required 
+                                   autofocus />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label" for="password">
+                                <i class="fas fa-lock me-2"></i>Senha
+                            </label>
+                            <input class="form-control" 
+                                   id="password" 
+                                   name="password" 
+                                   type="password" 
+                                   required />
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" 
+                                   id="remember" 
+                                   name="remember" 
+                                   type="checkbox" />
+                            <label class="form-check-label" for="remember">
+                                <i class="fas fa-clock me-2"></i>Lembrar de mim
+                            </label>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Entrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        <a href="{% url 'register' %}" class="text-decoration-none">
+                            <i class="fas fa-user-plus me-2"></i>Não tem uma conta? Registre-se!
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

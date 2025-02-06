@@ -1,0 +1,123 @@
+{% extends 'expenses/base.html' %}
+
+{% block title %}Tier Lists{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold">
+                <i class="fas fa-list text-primary me-3"></i>Minhas Tier Lists
+            </h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'expenses:tierlist_create' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>Nova Tier List
+            </a>
+        </div>
+    </div>
+
+    {% if tierlists %}
+        <div class="row">
+            {% for tierlist in tierlists %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ tierlist.name }}</h5>
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-dark" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'expenses:tieritem_create' tierlist.id %}">
+                                                <i class="fas fa-plus me-2"></i>Adicionar Item
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fas fa-edit me-2"></i>Editar
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="#">
+                                                <i class="fas fa-trash me-2"></i>Excluir
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% for tier, items in tierlist.items_by_tier.items %}
+                                <div class="tier-row mb-3">
+                                    <div class="tier-label {{ tier|lower }}-tier">{{ tier }}</div>
+                                    <div class="tier-items">
+                                        {% for item in items %}
+                                            <span class="badge bg-secondary me-2 mb-2">{{ item.name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="card-footer text-muted">
+                            <small>
+                                <i class="fas fa-clock me-1"></i>
+                                Criada em {{ tierlist.created_at|date:"d/m/Y" }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="display-1 text-muted mb-4">
+                <i class="fas fa-list"></i>
+            </div>
+            <h2 class="text-muted">Nenhuma Tier List criada</h2>
+            <p class="lead text-muted">Comece criando sua primeira Tier List!</p>
+            <a href="{% url 'expenses:tierlist_create' %}" class="btn btn-primary btn-lg mt-3">
+                <i class="fas fa-plus me-2"></i>Criar Primeira Tier List
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.tier-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.tier-label {
+    flex: 0 0 40px;
+    text-align: center;
+    padding: 0.5rem;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.tier-items {
+    flex: 1;
+    padding: 0.5rem;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 4px;
+    min-height: 45px;
+}
+
+.s-tier { background-color: #FFD700; color: black; }
+.a-tier { background-color: #FF6B6B; color: white; }
+.b-tier { background-color: #4ECDC4; color: white; }
+.c-tier { background-color: #95A5A6; color: white; }
+.d-tier { background-color: #7F8C8D; color: white; }
+.f-tier { background-color: #2C3E50; color: white; }
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'expenses/base.html' %}
+
+{% block title %}Atividade dos Usuários{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-5 fw-bold">
+                <i class="fas fa-users text-primary me-3"></i>Atividade dos Usuários
+            </h1>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuário</th>
+                            <th>IP</th>
+                            <th>Última Atividade</th>
+                            <th>Navegador</th>
+                            <th>Página</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in activities %}
+                            <tr>
+                                <td>
+                                    <i class="fas fa-user text-primary me-2"></i>
+                                    {{ activity.user.username }}
+                                </td>
+                                <td>
+                                    <i class="fas fa-network-wired text-secondary me-2"></i>
+                                    {{ activity.ip_address }}
+                                </td>
+                                <td>
+                                    <i class="fas fa-clock text-warning me-2"></i>
+                                    {{ activity.last_activity|date:"d/m/Y H:i:s" }}
+                                </td>
+                                <td>
+                                    <i class="fas fa-globe text-info me-2"></i>
+                                    {{ activity.user_agent|truncatechars:50 }}
+                                </td>
+                                <td>
+                                    <i class="fas fa-link text-success me-2"></i>
+                                    {{ activity.path }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.table th {
+    background-color: #f8f9fa;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,123,255,0.05);
+}
+</style>
+{% endblock %}

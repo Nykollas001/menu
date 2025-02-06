@@ -1,0 +1,15 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Menus</title>
+</head>
+<body>
+    <h1>Lista de Menus</h1>
+    <ul>
+        {% for menu in menus %}
+            <li>{{ menu.nome }}: {{ menu.descricao }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
