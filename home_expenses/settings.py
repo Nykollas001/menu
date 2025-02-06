@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'expenses.apps.ExpensesConfig',
-    'social_django',
+    'tarefas',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +50,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'expenses.middleware.UserActivityMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'home_expenses.urls'
@@ -66,8 +65,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -125,13 +122,8 @@ STATIC_URL = 'static/'
 
 # Configurações de Autenticação
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
-
-# Configurações do Google OAuth2
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''  # Seu Client ID do Google
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''  # Seu Client Secret do Google
 
 # URLs para redirecionamento após autenticação
 LOGIN_URL = 'login'

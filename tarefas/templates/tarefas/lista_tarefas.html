@@ -1,0 +1,61 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Minhas Tarefas</h1>
+    
+    <a href="{% url 'tarefas:criar_tarefa' %}" class="btn btn-primary mb-3">Nova Tarefa</a>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if tarefas %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Prioridade</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tarefa in tarefas %}
+                    <tr>
+                        <td>{{ tarefa.titulo }}</td>
+                        <td>
+                            {% if tarefa.prioridade == 'ALTA' %}
+                                <span class="badge bg-danger">{{ tarefa.get_prioridade_display }}</span>
+                            {% elif tarefa.prioridade == 'MEDIA' %}
+                                <span class="badge bg-warning">{{ tarefa.get_prioridade_display }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ tarefa.get_prioridade_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if tarefa.status == 'CONCLUIDA' %}
+                                <span class="badge bg-success">{{ tarefa.get_status_display }}</span>
+                            {% elif tarefa.status == 'EM_ANDAMENTO' %}
+                                <span class="badge bg-info">{{ tarefa.get_status_display }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ tarefa.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if tarefa.status != 'CONCLUIDA' %}
+                                <a href="{% url 'tarefas:concluir_tarefa' tarefa.id %}" class="btn btn-sm btn-success">Concluir</a>
+                            {% endif %}
+                            <a href="{% url 'tarefas:excluir_tarefa' tarefa.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?')">Excluir</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Você não tem tarefas cadastradas.</p>
+    {% endif %}
+</div>
+{% endblock %}

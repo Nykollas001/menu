@@ -1,0 +1,35 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Criar Nova Tarefa</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="titulo" class="form-label">Título</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" required>
+        </div>
+        <div class="mb-3">
+            <label for="descricao" class="form-label">Descrição</label>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="prioridade" class="form-label">Prioridade</label>
+            <select class="form-select" id="prioridade" name="prioridade" required>
+                <option value="BAIXA">Baixa</option>
+                <option value="MEDIA">Média</option>
+                <option value="ALTA">Alta</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Criar Tarefa</button>
+        <a href="{% url 'tarefas:lista_tarefas' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

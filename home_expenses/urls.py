@@ -27,6 +27,7 @@ urlpatterns = [
     path('', redirect_to_expenses, name='home'),
     path('admin/', admin.site.urls),
     path('expenses/', include('expenses.urls')),
+    path('tarefas/', include('tarefas.urls')),
     # Autenticação
     path('login/', auth_views.LoginView.as_view(template_name='expenses/login.html', redirect_authenticated_user=True), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
