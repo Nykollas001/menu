@@ -9,6 +9,10 @@ armazenamento_senhas = {}  # Dicionário para guardar senhas (como um cofre virt
 tier_list = []  # Lista para armazenar itens de uma tier list (classificações)
 tier_list_name = None  # Nome da tier list ativa
 notas = {}  # Dicionário para armazenar as notas de alunos
+tarefas = []  # Lista para armazenar tarefas (to-do list)
+lembretes = []  # Lista para armazenar lembretes
+metas = []  # Lista para armazenar metas e objetivos
+notas_rapidas = []  # Lista para armazenar notas rápidas
 
 def limpar_tela():
     """
@@ -116,10 +120,15 @@ def main():
         print("3. Armazenamento de Senhas")
         print("4. Menu de Notas")
         print("5. Menu de Cartas")
-        print("6. Sair")
+        print("6. Menu de Tarefas")
+        print("7. Menu de Lembretes")
+        print("8. Menu de Metas")
+        print("9. Calculadora Financeira")
+        print("10. Notas Rápidas")
+        print("11. Sair")
 
         opcao = obter_input("Escolha uma opção: ")
-        if opcao == "6":
+        if opcao == "11":
             print("Saindo do programa... Até logo!")
             break
         elif opcao == "1":
@@ -132,6 +141,16 @@ def main():
             menu_notas()
         elif opcao == "5":
             menu_cartas()
+        elif opcao == "6":
+            menu_tarefas()
+        elif opcao == "7":
+            menu_lembretes()
+        elif opcao == "8":
+            menu_metas()
+        elif opcao == "9":
+            calculadora_financeira()
+        elif opcao == "10":
+            menu_notas_rapidas()
         else:
             print("Opção inválida. Tente novamente.")
 
@@ -213,6 +232,218 @@ def obter_input(mensagem):
         print("Saindo do programa... Até logo!")
         exit()
     return entrada
+
+def menu_tarefas():
+    """
+    Gerencia uma lista de tarefas com prioridades.
+    Permite adicionar, remover e marcar tarefas como concluídas.
+    """
+    while True:
+        limpar_tela()
+        print("=== MENU DE TAREFAS ===")
+        print("1. Adicionar Tarefa")
+        print("2. Listar Tarefas")
+        print("3. Marcar Tarefa como Concluída")
+        print("4. Remover Tarefa")
+        print("5. Voltar ao Menu Principal")
+
+        opcao = obter_input("Escolha uma opção: ")
+        if opcao == "5":
+            break
+        elif opcao == "1":
+            titulo = obter_input("Digite o título da tarefa: ")
+            prioridade = obter_input("Digite a prioridade (Alta/Média/Baixa): ")
+            tarefas.append({"titulo": titulo, "prioridade": prioridade, "concluida": False})
+            print("Tarefa adicionada com sucesso!")
+        elif opcao == "2":
+            if not tarefas:
+                print("Nenhuma tarefa cadastrada.")
+            else:
+                for i, tarefa in enumerate(tarefas, 1):
+                    status = "✓" if tarefa["concluida"] else " "
+                    print(f"{i}. [{status}] {tarefa['titulo']} (Prioridade: {tarefa['prioridade']})")
+        elif opcao == "3":
+            if not tarefas:
+                print("Nenhuma tarefa cadastrada.")
+            else:
+                for i, tarefa in enumerate(tarefas, 1):
+                    status = "✓" if tarefa["concluida"] else " "
+                    print(f"{i}. [{status}] {tarefa['titulo']}")
+                num = int(obter_input("Digite o número da tarefa a ser marcada como concluída: "))
+                if 1 <= num <= len(tarefas):
+                    tarefas[num-1]["concluida"] = True
+                    print("Tarefa marcada como concluída!")
+        elif opcao == "4":
+            if not tarefas:
+                print("Nenhuma tarefa cadastrada.")
+            else:
+                for i, tarefa in enumerate(tarefas, 1):
+                    print(f"{i}. {tarefa['titulo']}")
+                num = int(obter_input("Digite o número da tarefa a ser removida: "))
+                if 1 <= num <= len(tarefas):
+                    del tarefas[num-1]
+                    print("Tarefa removida com sucesso!")
+        input("\nPressione Enter para continuar...")
+
+def menu_lembretes():
+    """
+    Gerencia lembretes com data e hora.
+    """
+    while True:
+        limpar_tela()
+        print("=== MENU DE LEMBRETES ===")
+        print("1. Adicionar Lembrete")
+        print("2. Listar Lembretes")
+        print("3. Remover Lembrete")
+        print("4. Voltar ao Menu Principal")
+
+        opcao = obter_input("Escolha uma opção: ")
+        if opcao == "4":
+            break
+        elif opcao == "1":
+            titulo = obter_input("Digite o título do lembrete: ")
+            data = obter_input("Digite a data (DD/MM/AAAA): ")
+            hora = obter_input("Digite a hora (HH:MM): ")
+            lembretes.append({"titulo": titulo, "data": data, "hora": hora})
+            print("Lembrete adicionado com sucesso!")
+        elif opcao == "2":
+            if not lembretes:
+                print("Nenhum lembrete cadastrado.")
+            else:
+                for i, lembrete in enumerate(lembretes, 1):
+                    print(f"{i}. {lembrete['titulo']} - {lembrete['data']} às {lembrete['hora']}")
+        elif opcao == "3":
+            if not lembretes:
+                print("Nenhum lembrete cadastrado.")
+            else:
+                for i, lembrete in enumerate(lembretes, 1):
+                    print(f"{i}. {lembrete['titulo']}")
+                num = int(obter_input("Digite o número do lembrete a ser removido: "))
+                if 1 <= num <= len(lembretes):
+                    del lembretes[num-1]
+                    print("Lembrete removido com sucesso!")
+        input("\nPressione Enter para continuar...")
+
+def menu_metas():
+    """
+    Gerencia metas e objetivos com prazo e progresso.
+    """
+    while True:
+        limpar_tela()
+        print("=== MENU DE METAS ===")
+        print("1. Adicionar Meta")
+        print("2. Listar Metas")
+        print("3. Atualizar Progresso")
+        print("4. Remover Meta")
+        print("5. Voltar ao Menu Principal")
+
+        opcao = obter_input("Escolha uma opção: ")
+        if opcao == "5":
+            break
+        elif opcao == "1":
+            titulo = obter_input("Digite o título da meta: ")
+            prazo = obter_input("Digite o prazo (DD/MM/AAAA): ")
+            metas.append({"titulo": titulo, "prazo": prazo, "progresso": 0})
+            print("Meta adicionada com sucesso!")
+        elif opcao == "2":
+            if not metas:
+                print("Nenhuma meta cadastrada.")
+            else:
+                for i, meta in enumerate(metas, 1):
+                    print(f"{i}. {meta['titulo']} - Prazo: {meta['prazo']} - Progresso: {meta['progresso']}%")
+        elif opcao == "3":
+            if not metas:
+                print("Nenhuma meta cadastrada.")
+            else:
+                for i, meta in enumerate(metas, 1):
+                    print(f"{i}. {meta['titulo']} - Progresso atual: {meta['progresso']}%")
+                num = int(obter_input("Digite o número da meta a ser atualizada: "))
+                if 1 <= num <= len(metas):
+                    novo_progresso = int(obter_input("Digite o novo progresso (0-100): "))
+                    if 0 <= novo_progresso <= 100:
+                        metas[num-1]["progresso"] = novo_progresso
+                        print("Progresso atualizado com sucesso!")
+        elif opcao == "4":
+            if not metas:
+                print("Nenhuma meta cadastrada.")
+            else:
+                for i, meta in enumerate(metas, 1):
+                    print(f"{i}. {meta['titulo']}")
+                num = int(obter_input("Digite o número da meta a ser removida: "))
+                if 1 <= num <= len(metas):
+                    del metas[num-1]
+                    print("Meta removida com sucesso!")
+        input("\nPressione Enter para continuar...")
+
+def calculadora_financeira():
+    """
+    Calculadora financeira com várias funcionalidades.
+    """
+    while True:
+        limpar_tela()
+        print("=== CALCULADORA FINANCEIRA ===")
+        print("1. Calcular Juros Compostos")
+        print("2. Calcular Parcelas")
+        print("3. Calcular Retorno sobre Investimento")
+        print("4. Voltar ao Menu Principal")
+
+        opcao = obter_input("Escolha uma opção: ")
+        if opcao == "4":
+            break
+        elif opcao == "1":
+            principal = float(obter_input("Digite o valor principal: "))
+            taxa = float(obter_input("Digite a taxa de juros anual (%): "))
+            tempo = float(obter_input("Digite o tempo em anos: "))
+            montante = principal * (1 + taxa/100) ** tempo
+            print(f"\nMontante final: R$ {montante:.2f}")
+        elif opcao == "2":
+            valor = float(obter_input("Digite o valor total: "))
+            num_parcelas = int(obter_input("Digite o número de parcelas: "))
+            valor_parcela = valor / num_parcelas
+            print(f"\nValor de cada parcela: R$ {valor_parcela:.2f}")
+        elif opcao == "3":
+            investimento = float(obter_input("Digite o valor do investimento: "))
+            retorno = float(obter_input("Digite o valor do retorno: "))
+            roi = ((retorno - investimento) / investimento) * 100
+            print(f"\nROI: {roi:.2f}%")
+        input("\nPressione Enter para continuar...")
+
+def menu_notas_rapidas():
+    """
+    Sistema de notas rápidas para anotações temporárias.
+    """
+    while True:
+        limpar_tela()
+        print("=== NOTAS RÁPIDAS ===")
+        print("1. Adicionar Nota")
+        print("2. Listar Notas")
+        print("3. Remover Nota")
+        print("4. Voltar ao Menu Principal")
+
+        opcao = obter_input("Escolha uma opção: ")
+        if opcao == "4":
+            break
+        elif opcao == "1":
+            nota = obter_input("Digite sua nota: ")
+            notas_rapidas.append(nota)
+            print("Nota adicionada com sucesso!")
+        elif opcao == "2":
+            if not notas_rapidas:
+                print("Nenhuma nota cadastrada.")
+            else:
+                for i, nota in enumerate(notas_rapidas, 1):
+                    print(f"{i}. {nota}")
+        elif opcao == "3":
+            if not notas_rapidas:
+                print("Nenhuma nota cadastrada.")
+            else:
+                for i, nota in enumerate(notas_rapidas, 1):
+                    print(f"{i}. {nota}")
+                num = int(obter_input("Digite o número da nota a ser removida: "))
+                if 1 <= num <= len(notas_rapidas):
+                    del notas_rapidas[num-1]
+                    print("Nota removida com sucesso!")
+        input("\nPressione Enter para continuar...")
 
 # Início do programa
 if __name__ == "__main__":
