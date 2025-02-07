@@ -3,58 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - {% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} - Dashboard</title>
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     
     <!-- Custom CSS -->
     <style>
+        :root {
+            --primary-bg: #121212;
+            --secondary-bg: #1e1e1e;
+            --accent-color: #007bff;
+            --text-color: #ffffff;
+            --border-color: #333;
+        }
+
         body {
-            background-color: #121212;
-            color: #ffffff;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+
+        /* Navbar Styles */
         .navbar {
-            background-color: #1e1e1e !important;
+            background-color: var(--secondary-bg) !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         .nav-link {
-            color: #ffffff !important;
+            color: var(--text-color) !important;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
         }
-        .nav-link:hover {
-            color: #007bff !important;
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent-color) !important;
+            background-color: rgba(0,123,255,0.1);
         }
-        .navbar-brand {
-            color: #ffffff !important;
-        }
+
+        /* Card Styles */
         .card {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
         }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Table Styles */
         .table {
-            color: #ffffff;
+            color: var(--text-color);
+            border-color: var(--border-color);
         }
+
+        .table thead th {
+            background-color: var(--secondary-bg);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem 0;
+            margin-bottom: 70px;
+        }
+
+        /* Footer Styles */
         .footer {
-            background-color: #1e1e1e;
-            color: #ffffff;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
             padding: 1rem 0;
             position: fixed;
             bottom: 0;
             width: 100%;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
         }
-        .main-content {
-            margin-bottom: 100px;
+
+        .footer a {
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Alert Styles */
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+
+        /* Button Styles */
+        .btn {
+            border-radius: 5px;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
         }
     </style>
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'expenses:index' %}">
-                <i class="fas fa-chart-line me-2"></i>Dashboard
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'expenses:index' %}">
+                <i class="fas fa-chart-line me-2"></i>
+                <span>Dashboard</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -64,42 +150,54 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'expenses:index' %}">
-                            <i class="fas fa-home me-1"></i>Início
+                            <i class="fas fa-home me-2"></i>Início
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'grade_list' %}active{% endif %}" href="{% url 'expenses:grade_list' %}">
-                            <i class="fas fa-graduation-cap me-1"></i>Notas
+                            <i class="fas fa-graduation-cap me-2"></i>Notas
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'tierlist_list' %}active{% endif %}" href="{% url 'expenses:tierlist_list' %}">
-                            <i class="fas fa-list me-1"></i>Tier Lists
+                            <i class="fas fa-list-ol me-2"></i>Tier Lists
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'diary_list' %}active{% endif %}" href="{% url 'expenses:diary_list' %}">
+                            <i class="fas fa-book me-2"></i>Diário
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'password_list' %}active{% endif %}" href="{% url 'expenses:password_list' %}">
-                            <i class="fas fa-key me-1"></i>Senhas
+                            <i class="fas fa-key me-2"></i>Senhas
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'draw_card' %}active{% endif %}" href="{% url 'expenses:draw_card' %}">
-                            <i class="fas fa-cards me-1"></i>Cartas
+                            <i class="fas fa-cards me-2"></i>Cartas
                         </a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
-                    {% if user.is_superuser %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'expenses:user_activity' %}">
-                            <i class="fas fa-users me-1"></i>Atividade dos Usuários
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>{{ user.username }}
                         </a>
-                    </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">
-                            <i class="fas fa-sign-out-alt me-1"></i>Sair
-                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="background-color: var(--secondary-bg);">
+                            {% if user.is_superuser %}
+                            <li>
+                                <a class="dropdown-item text-light" href="/admin/">
+                                    <i class="fas fa-cog me-2"></i>Admin
+                                </a>
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a class="dropdown-item text-light" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Sair
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
                 {% endif %}
@@ -108,39 +206,60 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <main class="main-content">
         <div class="container">
             {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="messages mb-4">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
             {% endif %}
 
             {% block content %}
             {% endblock %}
         </div>
-    </div>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container text-center">
-            <p class="mb-0">
-                <a href="https://instagram.com/nykollasgk" class="text-light text-decoration-none" target="_blank">
-                    <i class="fab fa-instagram me-2"></i>@nykollasgk
-                </a>
-                <span class="mx-2">|</span>
-                <a href="mailto:nykollasguimaraes5@gmail.com" class="text-light text-decoration-none">
-                    <i class="fas fa-envelope me-2"></i>nykollasguimaraes5@gmail.com
-                </a>
-            </p>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <span>&copy; {% now "Y" %} Dashboard. Todos os direitos reservados.</span>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="https://instagram.com/nykollasgk" class="text-decoration-none me-3" target="_blank">
+                        <i class="fab fa-instagram me-1"></i>@nykollasgk
+                    </a>
+                    <a href="mailto:nykollasguimaraes5@gmail.com" class="text-decoration-none">
+                        <i class="fas fa-envelope me-1"></i>nykollasguimaraes5@gmail.com
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    {% block scripts %}{% endblock %}
+    <!-- Bootstrap 5.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Fechar alertas automaticamente após 5 segundos
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

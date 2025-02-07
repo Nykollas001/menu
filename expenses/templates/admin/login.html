@@ -1,0 +1,80 @@
+{% extends "admin/login.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+body.login {
+    background: #2c3e50;
+}
+
+.login #header {
+    background: none;
+    height: auto;
+    padding: 30px 20px;
+}
+
+.login #header h1 {
+    font-size: 24px;
+    text-align: center;
+}
+
+.login #container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 100px auto;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login .form-row {
+    padding: 10px 0;
+}
+
+.login .form-row label {
+    color: #2c3e50;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.login .form-row input {
+    background: #f7f9fc;
+    border: 1px solid #e1e8ed;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+}
+
+.login .submit-row {
+    padding: 20px 0 0;
+}
+
+.login .submit-row input {
+    background: #3498db;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px;
+    width: 100%;
+}
+
+.login .submit-row input:hover {
+    background: #2980b9;
+}
+
+.login .errornote {
+    background: #e74c3c;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    margin: 0 0 20px;
+    padding: 10px;
+}
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">Sistema de Gestão</h1>
+{% endblock %}

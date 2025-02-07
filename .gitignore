@@ -129,6 +129,8 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
+!.env.example
 .venv
 env/
 venv/
@@ -169,3 +171,24 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Static files
+/static/
+/staticfiles/
+/media/
+
+# Logs
+/logs/
+*.log
+
+# Coverage
+.coverage
+htmlcov/
+
+# pytest
+.pytest_cache/

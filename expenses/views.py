@@ -1,40 +1,40 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Prefetch
+from .models import Grade, TierList, DiaryEntry, PasswordStorage, UserActivity, TierItem
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from .models import Grade, TierList, TierItem, UserActivity, DiaryEntry, PasswordStorage
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import get_object_or_404
 import random
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 @login_required
+@cache_page(60 * 15)  # Cache por 15 minutos
 def index(request):
-    # Obtém estatísticas para o dashboard
-    grades_count = Grade.objects.filter(user=request.user).count()
-    tierlists_count = TierList.objects.filter(user=request.user).count()
-    diary_count = DiaryEntry.objects.filter(user=request.user).count()
-    passwords_count = PasswordStorage.objects.filter(user=request.user).count()
+    # Se for superusuário, redireciona para o admin
+    if request.user.is_superuser:
+        return redirect('admin:index')
     
-    # Obtém as últimas notas
-    latest_grades = Grade.objects.filter(user=request.user).order_by('-date')[:5]
-    
+    # Vista simplificada para usuários normais
     context = {
-        'grades_count': grades_count,
-        'tierlists_count': tierlists_count,
-        'diary_count': diary_count,
-        'passwords_count': passwords_count,
-        'latest_grades': latest_grades,
+        'grades_count': Grade.objects.filter(user=request.user).count(),
+        'tierlists_count': TierList.objects.filter(user=request.user).count(),
+        'diary_count': DiaryEntry.objects.filter(user=request.user).count(),
+        'passwords_count': PasswordStorage.objects.filter(user=request.user).count(),
+        'latest_grades': Grade.objects.filter(user=request.user).order_by('-date')[:5],
         'user': request.user
     }
-    return render(request, 'expenses/index.html', context)
+    
+    return render(request, 'expenses/user_dashboard.html', context)
 
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Conta criada com sucesso!')
-            return redirect('expenses:index')
+            form.save()
+            return redirect('login')
     else:
         form = UserCreationForm()
     return render(request, 'expenses/register.html', {'form': form})
@@ -255,59 +255,22 @@ def password_create(request):
 # View para Cartas
 @login_required
 def draw_card(request):
-    cards = {
-        1: {
-            'title': 'Aspecto Masculino - Lição Atual',
-            'message': 'Esta carta revela sua atual lição no aspecto Yang (masculino). '
-                      'Foque em ação, iniciativa e expressão externa. '
-                      'É um momento para liderar e manifestar suas ideias no mundo.',
-            'icon': 'mars'
-        },
-        2: {
-            'title': 'Aspecto Feminino - Lição Atual',
-            'message': 'Esta carta mostra sua lição presente no aspecto Yin (feminino). '
-                      'Dê atenção à sua intuição, sentimentos e vida interior. '
-                      'É hora de nutrir, acolher e compreender.',
-            'icon': 'venus'
-        },
-        3: {
-            'title': 'Desafio do Aspecto Masculino',
-            'message': 'Aqui está seu atual desafio no aspecto Yang (masculino). '
-                      'Observe onde você pode estar sendo muito agressivo ou passivo. '
-                      'Encontre o equilíbrio na sua força e determinação.',
-            'icon': 'fist-raised'
-        },
-        4: {
-            'title': 'Desafio do Aspecto Feminino',
-            'message': 'Este é seu desafio presente no aspecto Yin (feminino). '
-                      'Reflita sobre suas emoções e conexões. '
-                      'Busque harmonia entre sentir e agir.',
-            'icon': 'heart'
-        },
-        5: {
-            'title': 'Assistência dos Ancestrais',
-            'message': 'Uma mensagem de sabedoria dos seus ancestrais. '
-                      'Eles oferecem apoio e orientação no seu caminho. '
-                      'Confie na sabedoria que flui através das gerações.',
-            'icon': 'tree'
-        }
-    }
+    # Lista de cartas disponíveis
+    cards = [
+        {'name': 'Ás de Copas', 'suit': 'copas', 'value': 'A'},
+        {'name': 'Dois de Copas', 'suit': 'copas', 'value': '2'},
+        {'name': 'Três de Copas', 'suit': 'copas', 'value': '3'},
+        # ... mais cartas ...
+    ]
     
-    card_number = random.randint(1, 5)
-    card = cards[card_number]
+    # Escolhe uma carta aleatória
+    card = random.choice(cards)
     
-    return render(request, 'expenses/card.html', {
-        'card_number': card_number,
-        'card_title': card['title'],
-        'card_message': card['message'],
-        'card_icon': card['icon']
-    })
-
-# View para Atividade dos Usuários
-def is_superuser(user):
-    return user.is_superuser
-
-@user_passes_test(is_superuser)
-def user_activity(request):
-    activities = UserActivity.objects.select_related('user').all()
-    return render(request, 'expenses/admin/user_activity.html', {'activities': activities})
+    # Registra a atividade
+    UserActivity.objects.create(
+        user=request.user,
+        activity_type='card_draw',
+        description=f'Carta sorteada: {card["name"]}'
+    )
+    
+    return render(request, 'expenses/card_draw.html', {'card': card})

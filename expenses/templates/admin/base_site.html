@@ -1,0 +1,134 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Sistema de Gestão{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">Sistema de Gestão</a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+:root {
+    --primary: #2c3e50;
+    --secondary: #34495e;
+    --accent: #3498db;
+    --primary-fg: #fff;
+}
+
+body {
+    background: #f8f9fa;
+}
+
+#header {
+    background: var(--primary);
+    color: var(--primary-fg);
+    padding: 15px 40px;
+}
+
+#branding h1 {
+    color: var(--primary-fg);
+    font-size: 24px;
+}
+
+.module h2, .module caption, .inline-group h2 {
+    background: var(--secondary);
+    padding: 12px 15px;
+    border-radius: 4px 4px 0 0;
+}
+
+div.breadcrumbs {
+    background: var(--secondary);
+    padding: 15px 40px;
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background: var(--accent);
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+.button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background: var(--primary);
+}
+
+.button.default, input[type=submit].default, .submit-row input.default {
+    background: var(--accent);
+}
+
+.button.default:hover, input[type=submit].default:hover {
+    background: var(--primary);
+}
+
+a:link, a:visited {
+    color: var(--accent);
+}
+
+.object-tools a:link, .object-tools a:visited {
+    background: var(--accent);
+}
+
+.object-tools a:hover {
+    background: var(--primary);
+}
+
+#changelist-filter h2 {
+    background: var(--secondary);
+}
+
+#changelist-filter li.selected a {
+    color: var(--accent);
+}
+
+.paginator a:link, .paginator a:visited {
+    background: var(--accent);
+}
+
+.paginator a:hover {
+    background: var(--primary);
+}
+
+.help, p.help, form p.help, div.help, form div.help, div.help li {
+    color: #666;
+}
+
+/* Cards e elementos do dashboard */
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: var(--secondary);
+    color: white;
+    border-bottom: none;
+}
+
+.table-dark {
+    background-color: var(--secondary);
+}
+
+.table-dark th {
+    border-color: #4a5568;
+}
+
+.table-dark td {
+    border-color: #4a5568;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    #header {
+        padding: 10px 20px;
+    }
+    
+    div.breadcrumbs {
+        padding: 10px 20px;
+    }
+}
+</style>
+{% endblock %}

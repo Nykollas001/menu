@@ -4,73 +4,140 @@
 
 {% block content %}
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center align-items-center min-vh-100">
         <div class="col-md-6 col-lg-5">
-            <div class="card shadow-lg border-0 rounded-lg mt-5">
-                <div class="card-header">
-                    <h3 class="text-center font-weight-light my-2">
-                        <i class="fas fa-user-circle me-2"></i>Login
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <form method="post">
+            <!-- Logo e Nome do Sistema -->
+            <div class="text-center mb-4">
+                <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                <h2 class="fw-bold">Dashboard</h2>
+                <p class="text-muted">Faça login para acessar o sistema</p>
+            </div>
+
+            <!-- Card de Login -->
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <form method="post" class="needs-validation" novalidate>
                         {% csrf_token %}
+                        
                         {% if form.errors %}
-                        <div class="alert alert-danger">
-                            <i class="fas fa-exclamation-circle me-2"></i>
-                            Usuário ou senha incorretos
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="fas fa-exclamation-circle flex-shrink-0 me-2"></i>
+                            <div>
+                                Usuário ou senha incorretos. Por favor, tente novamente.
+                            </div>
                         </div>
                         {% endif %}
                         
-                        <div class="mb-3">
-                            <label class="form-label" for="username">
+                        <!-- Campo Usuário -->
+                        <div class="form-floating mb-4">
+                            <input type="text" 
+                                   class="form-control {% if form.errors %}is-invalid{% endif %}"
+                                   id="username"
+                                   name="username"
+                                   placeholder="Usuário"
+                                   required
+                                   autofocus>
+                            <label for="username">
                                 <i class="fas fa-user me-2"></i>Usuário
                             </label>
-                            <input class="form-control" 
-                                   id="username" 
-                                   name="username" 
-                                   type="text" 
-                                   required 
-                                   autofocus />
+                            <div class="invalid-feedback">
+                                Por favor, informe seu usuário.
+                            </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label class="form-label" for="password">
+                        <!-- Campo Senha -->
+                        <div class="form-floating mb-4">
+                            <input type="password"
+                                   class="form-control {% if form.errors %}is-invalid{% endif %}"
+                                   id="password"
+                                   name="password"
+                                   placeholder="Senha"
+                                   required>
+                            <label for="password">
                                 <i class="fas fa-lock me-2"></i>Senha
                             </label>
-                            <input class="form-control" 
-                                   id="password" 
-                                   name="password" 
-                                   type="password" 
-                                   required />
+                            <div class="invalid-feedback">
+                                Por favor, informe sua senha.
+                            </div>
                         </div>
                         
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" 
-                                   id="remember" 
-                                   name="remember" 
-                                   type="checkbox" />
+                        <!-- Lembrar de mim -->
+                        <div class="form-check mb-4">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   id="remember"
+                                   name="remember">
                             <label class="form-check-label" for="remember">
                                 <i class="fas fa-clock me-2"></i>Lembrar de mim
                             </label>
                         </div>
                         
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-sign-in-alt me-2"></i>Entrar
-                            </button>
+                        <!-- Botão de Login -->
+                        <button type="submit" class="btn btn-primary w-100 py-3 mb-4">
+                            <i class="fas fa-sign-in-alt me-2"></i>Entrar
+                        </button>
+                        
+                        <!-- Link para Registro -->
+                        <div class="text-center">
+                            <p class="text-muted">
+                                Não tem uma conta? 
+                                <a href="{% url 'register' %}" class="text-decoration-none">
+                                    <i class="fas fa-user-plus me-1"></i>Registre-se
+                                </a>
+                            </p>
                         </div>
                     </form>
                 </div>
-                <div class="card-footer text-center py-3">
-                    <div class="small">
-                        <a href="{% url 'register' %}" class="text-decoration-none">
-                            <i class="fas fa-user-plus me-2"></i>Não tem uma conta? Registre-se!
-                        </a>
-                    </div>
-                </div>
+            </div>
+
+            <!-- Footer do Login -->
+            <div class="text-center mt-4">
+                <p class="text-muted small mb-0">
+                    &copy; {% now "Y" %} Dashboard. Todos os direitos reservados.
+                </p>
             </div>
         </div>
     </div>
 </div>
+
+{% block extra_js %}
+<script>
+// Validação do formulário
+(function () {
+    'use strict'
+    
+    const forms = document.querySelectorAll('.needs-validation')
+    
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+
+// Mostrar/Ocultar senha
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.createElement('button');
+    togglePassword.type = 'button';
+    togglePassword.className = 'btn btn-outline-secondary position-absolute end-0 top-50 translate-middle-y';
+    togglePassword.innerHTML = '<i class="fas fa-eye"></i>';
+    togglePassword.style.right = '1rem';
+    togglePassword.style.zIndex = '5';
+    
+    passwordInput.parentElement.style.position = 'relative';
+    passwordInput.parentElement.appendChild(togglePassword);
+    
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        togglePassword.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}

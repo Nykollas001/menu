@@ -1,0 +1,93 @@
+{% extends 'expenses/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Boas-vindas -->
+    <div class="p-5 mb-4 bg-dark rounded-3 text-light">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Olá, {{ user.username }}!</h1>
+            <p class="col-md-8 fs-4">Bem-vindo ao seu painel de controle.</p>
+        </div>
+    </div>
+
+    <!-- Cards de Estatísticas -->
+    <div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+        <div class="col">
+            <div class="card h-100 bg-dark text-light border-primary">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-graduation-cap me-2"></i>Notas</h5>
+                    <p class="card-text display-6">{{ grades_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 bg-dark text-light border-success">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-list me-2"></i>Tier Lists</h5>
+                    <p class="card-text display-6">{{ tierlists_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 bg-dark text-light border-info">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-book me-2"></i>Diário</h5>
+                    <p class="card-text display-6">{{ diary_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 bg-dark text-light border-warning">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-key me-2"></i>Senhas</h5>
+                    <p class="card-text display-6">{{ passwords_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimas Notas -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-dark text-light">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Últimas Notas</h5>
+                </div>
+                <div class="card-body">
+                    {% if latest_grades %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Disciplina</th>
+                                    <th>Nota</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for grade in latest_grades %}
+                                <tr>
+                                    <td>{{ grade.subject }}</td>
+                                    <td>{{ grade.value }}</td>
+                                    <td>{{ grade.date }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">Nenhuma nota registrada ainda.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensagem para contatar administrador -->
+    <div class="mt-4 p-4 bg-dark text-light rounded">
+        <h5><i class="fas fa-info-circle me-2"></i>Precisa fazer alterações?</h5>
+        <p class="mb-0">Para adicionar, editar ou remover itens, entre em contato com um administrador do sistema.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,87 +1,192 @@
 {% extends 'expenses/base.html' %}
 {% load static %}
 
+{% block title %}Dashboard{% endblock %}
+
 {% block content %}
 <div class="container py-4">
-    <!-- Boas-vindas -->
-    <div class="p-5 mb-4 bg-dark rounded-3 text-light">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Bem-vindo, {{ user.username }}!</h1>
-            <p class="col-md-8 fs-4">Gerencie suas notas, crie tier lists, mantenha um diário e muito mais.</p>
+    <!-- Header com Boas-vindas -->
+    <div class="card mb-4 border-0 bg-gradient" style="background: linear-gradient(45deg, #1a237e, #0d47a1);">
+        <div class="card-body p-5">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-4 fw-bold mb-3">Olá, {{ user.username }}!</h1>
+                    {% if user.is_superuser %}
+                    <p class="fs-5 mb-4">Gerencie todo o sistema através do painel administrativo ou use as ferramentas rápidas abaixo.</p>
+                    <a href="/admin/" class="btn btn-light btn-lg me-2">
+                        <i class="fas fa-cog me-2"></i>Painel Admin
+                    </a>
+                    {% else %}
+                    <p class="fs-5 mb-4">Gerencie suas notas, crie tier lists, mantenha um diário e muito mais.</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-chart-line fa-5x opacity-75"></i>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Cards de Estatísticas -->
-    <div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
-        <div class="col">
-            <div class="card h-100 bg-dark text-light border-primary">
+    <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card h-100 border-0">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-graduation-cap me-2"></i>Notas</h5>
-                    <p class="card-text display-6">{{ grades_count }}</p>
-                    <a href="{% url 'expenses:grade_list' %}" class="btn btn-primary">Ver Notas</a>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0 me-3">
+                            <div class="rounded-circle p-3" style="background-color: rgba(13, 110, 253, 0.1);">
+                                <i class="fas fa-graduation-cap fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">Notas</h6>
+                            <h2 class="mb-0">{{ grades_count }}</h2>
+                        </div>
+                    </div>
+                    <a href="{% url 'expenses:grade_list' %}" class="btn btn-primary w-100">
+                        <i class="fas fa-arrow-right me-2"></i>Ver Notas
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="card h-100 bg-dark text-light border-success">
+        
+        <div class="col-sm-6 col-xl-3">
+            <div class="card h-100 border-0">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-list me-2"></i>Tier Lists</h5>
-                    <p class="card-text display-6">{{ tierlists_count }}</p>
-                    <a href="{% url 'expenses:tierlist_list' %}" class="btn btn-success">Ver Tier Lists</a>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0 me-3">
+                            <div class="rounded-circle p-3" style="background-color: rgba(25, 135, 84, 0.1);">
+                                <i class="fas fa-list-ol fa-2x text-success"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">Tier Lists</h6>
+                            <h2 class="mb-0">{{ tierlists_count }}</h2>
+                        </div>
+                    </div>
+                    <a href="{% url 'expenses:tierlist_list' %}" class="btn btn-success w-100">
+                        <i class="fas fa-arrow-right me-2"></i>Ver Tier Lists
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="card h-100 bg-dark text-light border-info">
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="card h-100 border-0">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-book me-2"></i>Diário</h5>
-                    <p class="card-text display-6">{{ diary_count }}</p>
-                    <a href="{% url 'expenses:diary_list' %}" class="btn btn-info">Ver Diário</a>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0 me-3">
+                            <div class="rounded-circle p-3" style="background-color: rgba(13, 202, 240, 0.1);">
+                                <i class="fas fa-book fa-2x text-info"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">Diário</h6>
+                            <h2 class="mb-0">{{ diary_count }}</h2>
+                        </div>
+                    </div>
+                    <a href="{% url 'expenses:diary_list' %}" class="btn btn-info w-100">
+                        <i class="fas fa-arrow-right me-2"></i>Ver Diário
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="card h-100 bg-dark text-light border-warning">
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="card h-100 border-0">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-key me-2"></i>Senhas</h5>
-                    <p class="card-text display-6">{{ passwords_count }}</p>
-                    <a href="{% url 'expenses:password_list' %}" class="btn btn-warning">Ver Senhas</a>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0 me-3">
+                            <div class="rounded-circle p-3" style="background-color: rgba(255, 193, 7, 0.1);">
+                                <i class="fas fa-key fa-2x text-warning"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">Senhas</h6>
+                            <h2 class="mb-0">{{ passwords_count }}</h2>
+                        </div>
+                    </div>
+                    <a href="{% url 'expenses:password_list' %}" class="btn btn-warning w-100">
+                        <i class="fas fa-arrow-right me-2"></i>Ver Senhas
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Últimas Notas -->
-    <div class="card bg-dark text-light">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Últimas Notas</h5>
+    <div class="card border-0">
+        <div class="card-header bg-transparent border-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-clock me-2"></i>Últimas Notas
+                </h5>
+                <a href="{% url 'expenses:grade_create' %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus me-2"></i>Nova Nota
+                </a>
+            </div>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
             {% if latest_grades %}
             <div class="table-responsive">
-                <table class="table table-dark table-hover">
+                <table class="table table-hover mb-0">
                     <thead>
                         <tr>
                             <th>Disciplina</th>
                             <th>Nota</th>
                             <th>Data</th>
+                            <th class="text-end">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for grade in latest_grades %}
                         <tr>
-                            <td>{{ grade.subject }}</td>
-                            <td>{{ grade.value }}</td>
-                            <td>{{ grade.date }}</td>
+                            <td>
+                                <i class="fas fa-book me-2 text-primary"></i>
+                                {{ grade.subject }}
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ grade.value|floatformat:2|float >= 7.0|yesno:'success,danger' }} px-2">
+                                    {{ grade.value|floatformat:2 }}
+                                </span>
+                            </td>
+                            <td>{{ grade.date|date:"d/m/Y" }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'expenses:grade_edit' grade.id %}" class="btn btn-sm btn-primary me-1">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'expenses:grade_delete' grade.id %}" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
             {% else %}
-            <p class="text-muted">Nenhuma nota registrada ainda.</p>
+            <div class="text-center py-5">
+                <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                <p class="text-muted mb-0">Nenhuma nota registrada ainda.</p>
+                <a href="{% url 'expenses:grade_create' %}" class="btn btn-primary mt-3">
+                    <i class="fas fa-plus me-2"></i>Adicionar Primeira Nota
+                </a>
+            </div>
             {% endif %}
         </div>
     </div>
 </div>
+
+<!-- Custom JS para este template -->
+{% block extra_js %}
+<script>
+    // Adiciona tooltips aos botões
+    document.addEventListener('DOMContentLoaded', function() {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+{% endblock %}
 {% endblock %}

@@ -1,0 +1,116 @@
+{% extends "admin/index.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Boas-vindas -->
+    <div class="p-5 mb-4 bg-dark rounded-3 text-light">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Painel Administrativo</h1>
+            <p class="col-md-8 fs-4">Gerencie todos os aspectos do sistema aqui.</p>
+        </div>
+    </div>
+
+    <!-- Módulos do Admin -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-dark text-light">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Módulos do Sistema</h5>
+                </div>
+                <div class="card-body">
+                    {% if app_list %}
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        {% for app in app_list %}
+                        <div class="col">
+                            <div class="card h-100 bg-secondary text-light">
+                                <div class="card-header">
+                                    <h5 class="mb-0">{{ app.name }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled mb-0">
+                                        {% for model in app.models %}
+                                        <li>
+                                            {% if model.admin_url %}
+                                            <a href="{{ model.admin_url }}" class="text-light">
+                                                <i class="fas fa-arrow-right me-2"></i>{{ model.name }}
+                                            </a>
+                                            {% else %}
+                                            {{ model.name }}
+                                            {% endif %}
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="mb-0">{% trans "You don't have permission to view or edit anything." %}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ações Recentes -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card bg-dark text-light">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-history me-2"></i>Ações Recentes</h5>
+                </div>
+                <div class="card-body">
+                    {% load log %}
+                    {% get_admin_log 10 as admin_log %}
+                    {% if admin_log %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>{% trans 'Action' %}</th>
+                                    <th>{% trans 'Object' %}</th>
+                                    <th>{% trans 'Date/Time' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in admin_log %}
+                                <tr>
+                                    <td>{{ entry.action_flag|action_flag_display }}</td>
+                                    <td>
+                                        {% if entry.is_addition %}
+                                        <i class="fas fa-plus text-success"></i>
+                                        {% elif entry.is_change %}
+                                        <i class="fas fa-edit text-warning"></i>
+                                        {% elif entry.is_deletion %}
+                                        <i class="fas fa-trash text-danger"></i>
+                                        {% endif %}
+                                        {% if entry.content_type %}
+                                        <span class="ms-2">
+                                            {% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}:
+                                            {% if entry.is_deletion or not entry.get_admin_url %}
+                                            {{ entry.object_repr }}
+                                            {% else %}
+                                            <a href="{{ entry.get_admin_url }}" class="text-light">
+                                                {{ entry.object_repr }}
+                                            </a>
+                                            {% endif %}
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ entry.action_time|date:"d/m/Y H:i" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="mb-0">{% trans "None available" %}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

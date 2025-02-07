@@ -2,11 +2,54 @@
 
 {% block title %}Notas{% endblock %}
 
+{% block extra_css %}
+<style>
+    .grade-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+    }
+
+    .card {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stats-card {
+        border-radius: 15px;
+        border: none;
+        background: linear-gradient(45deg, #1a237e, #0d47a1);
+        color: white;
+    }
+
+    .grade-status {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+
+    .filter-btn.active {
+        background-color: var(--bs-primary);
+        color: white;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container">
+<div class="container py-4">
+    <!-- Header com Estatísticas -->
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1 class="display-5 fw-bold">
+            <h1 class="display-5 fw-bold mb-4">
                 <i class="fas fa-graduation-cap text-primary me-3"></i>Minhas Notas
             </h1>
         </div>
@@ -17,104 +60,184 @@
         </div>
     </div>
 
+    <!-- Cards de Estatísticas -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stats-card card">
+                <div class="card-body p-4">
+                    <h6 class="text-white-50 mb-2">Média Geral</h6>
+                    <h2 class="mb-0">
+                        {{ grades|length|default:0 }}
+                        <small class="fs-6 ms-2">notas</small>
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card card" style="background: linear-gradient(45deg, #1b5e20, #2e7d32);">
+                <div class="card-body p-4">
+                    <h6 class="text-white-50 mb-2">Aprovações</h6>
+                    <h2 class="mb-0">
+                        {{ grades|length|default:0 }}
+                        <small class="fs-6 ms-2">disciplinas</small>
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card card" style="background: linear-gradient(45deg, #b71c1c, #c62828);">
+                <div class="card-body p-4">
+                    <h6 class="text-white-50 mb-2">Recuperação</h6>
+                    <h2 class="mb-0">
+                        {{ grades|length|default:0 }}
+                        <small class="fs-6 ms-2">disciplinas</small>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary filter-btn active" data-filter="all">
+                    Todas
+                </button>
+                <button type="button" class="btn btn-outline-primary filter-btn" data-filter="approved">
+                    Aprovadas
+                </button>
+                <button type="button" class="btn btn-outline-primary filter-btn" data-filter="recovery">
+                    Recuperação
+                </button>
+                <button type="button" class="btn btn-outline-primary filter-btn" data-filter="failed">
+                    Reprovadas
+                </button>
+            </div>
+        </div>
+    </div>
+
     {% if grades %}
-        <div class="row">
-            {% for grade in grades %}
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-header bg-light">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">{{ grade.subject }}</h5>
-                                <div class="dropdown">
-                                    <button class="btn btn-link text-dark" type="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" href="{% url 'expenses:grade_edit' grade.id %}">
-                                                <i class="fas fa-edit me-2"></i>Editar
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item text-danger" href="{% url 'expenses:grade_delete' grade.id %}">
-                                                <i class="fas fa-trash me-2"></i>Excluir
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <div class="d-flex align-items-center">
-                                        <div class="grade-circle me-3 {% if grade.value >= 7 %}bg-success{% elif grade.value >= 5 %}bg-warning{% else %}bg-danger{% endif %}">
-                                            {{ grade.value }}
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block">Nota Final</small>
-                                            <span class="fw-bold">{{ grade.value }}/10</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <small class="text-muted d-block">Status</small>
-                                    <span class="badge {% if grade.value >= 7 %}bg-success{% elif grade.value >= 5 %}bg-warning{% else %}bg-danger{% endif %}">
-                                        {% if grade.value >= 7 %}
-                                            Aprovado
-                                        {% elif grade.value >= 5 %}
-                                            Recuperação
-                                        {% else %}
-                                            Reprovado
-                                        {% endif %}
-                                    </span>
-                                </div>
-                                <div class="col-12">
-                                    <small class="text-muted d-block">Observações</small>
-                                    <p class="mb-0">{{ grade.notes|default:"Sem observações" }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer text-muted">
-                            <small>
-                                <i class="fas fa-calendar me-1"></i>
-                                {{ grade.date|date:"d/m/Y" }}
-                            </small>
-                        </div>
+    <!-- Lista de Notas -->
+    <div class="row" id="grades-container">
+        {% for grade in grades %}
+        <div class="col-md-6 col-lg-4 mb-4 grade-item" 
+             data-status="{% if grade.value >= 7 %}approved{% elif grade.value >= 5 %}recovery{% else %}failed{% endif %}">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-bold">{{ grade.subject }}</h5>
+                    <div class="dropdown">
+                        <button class="btn btn-link text-dark" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'expenses:grade_edit' grade.id %}">
+                                    <i class="fas fa-edit me-2"></i>Editar
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{% url 'expenses:grade_delete' grade.id %}">
+                                    <i class="fas fa-trash me-2"></i>Excluir
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="text-center py-5">
-            <div class="display-1 text-muted mb-4">
-                <i class="fas fa-graduation-cap"></i>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <div class="grade-circle me-3 {% if grade.value >= 7 %}bg-success{% elif grade.value >= 5 %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ grade.value|floatformat:1 }}
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block">Nota Final</small>
+                                    <span class="fw-bold">{{ grade.value|floatformat:2 }}/10</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted d-block mb-2">Status</small>
+                            <span class="grade-status {% if grade.value >= 7 %}bg-success{% elif grade.value >= 5 %}bg-warning{% else %}bg-danger{% endif %}">
+                                {% if grade.value >= 7 %}
+                                    <i class="fas fa-check-circle me-1"></i>Aprovado
+                                {% elif grade.value >= 5 %}
+                                    <i class="fas fa-exclamation-circle me-1"></i>Recuperação
+                                {% else %}
+                                    <i class="fas fa-times-circle me-1"></i>Reprovado
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    {% if grade.notes %}
+                    <div class="mt-4">
+                        <small class="text-muted d-block mb-2">Observações</small>
+                        <p class="mb-0 text-truncate">{{ grade.notes }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        {{ grade.date|date:"d/m/Y" }}
+                    </small>
+                </div>
             </div>
-            <h2 class="text-muted">Nenhuma nota registrada</h2>
-            <p class="lead text-muted">Comece registrando sua primeira nota!</p>
-            <a href="{% url 'expenses:grade_create' %}" class="btn btn-primary btn-lg mt-3">
-                <i class="fas fa-plus me-2"></i>Registrar Primeira Nota
-            </a>
         </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Estado Vazio -->
+    <div class="text-center py-5">
+        <div class="display-1 text-muted mb-4">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h2 class="text-muted">Nenhuma nota registrada</h2>
+        <p class="lead text-muted mb-4">Comece registrando sua primeira nota!</p>
+        <a href="{% url 'expenses:grade_create' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-plus me-2"></i>Adicionar Nota
+        </a>
+    </div>
     {% endif %}
 </div>
 
-<style>
-.grade-circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filtros
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const gradeItems = document.querySelectorAll('.grade-item');
 
-.badge {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.8rem;
-}
-</style>
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterBtns.forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
+            btn.classList.add('active');
+
+            const filter = btn.dataset.filter;
+
+            gradeItems.forEach(item => {
+                if (filter === 'all' || item.dataset.status === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}
