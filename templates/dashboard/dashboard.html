@@ -1,0 +1,85 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Dashboard - Início{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Bem-vindo, {{ user.username }}!</h2>
+            <p class="lead">Gerencie suas notas, crie tier lists, mantenha um diário e muito mais.</p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Cards com contadores -->
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Notas</h5>
+                    <p class="card-text display-4">{{ notes_count }}</p>
+                    <a href="{% url 'dashboard:notes' %}" class="btn btn-light">Ver todas</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Tier Lists</h5>
+                    <p class="card-text display-4">{{ tierlists_count }}</p>
+                    <a href="{% url 'dashboard:tier_lists' %}" class="btn btn-light">Ver todas</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Senhas</h5>
+                    <p class="card-text display-4">{{ passwords_count }}</p>
+                    <a href="{% url 'dashboard:passwords' %}" class="btn btn-light">Ver todas</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Cartas</h5>
+                    <p class="card-text display-4">{{ cards_count }}</p>
+                    <a href="{% url 'dashboard:cards' %}" class="btn btn-light">Ver todas</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Últimas Notas</h5>
+                </div>
+                <div class="card-body">
+                    {% if latest_notes %}
+                        <ul class="list-group list-group-flush">
+                            {% for note in latest_notes %}
+                                <li class="list-group-item">
+                                    <h6>{{ note.title }}</h6>
+                                    <small class="text-muted">{{ note.created_at|date:"d/m/Y H:i" }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">Nenhuma nota registrada ainda.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="mt-5 text-center text-muted">
+    <p>@{{ user.username }} | {{ user.email }}</p>
+</footer>
+{% endblock %}
